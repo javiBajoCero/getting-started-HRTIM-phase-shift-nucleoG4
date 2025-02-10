@@ -109,14 +109,24 @@ int main(void)
   HAL_HRTIM_WaveformCounterStart(&hhrtim1, HRTIM_TIMERID_TIMER_C);  // Start the counter of the Timer c operating in waveform mode
   HAL_HRTIM_WaveformCounterStart(&hhrtim1, HRTIM_TIMERID_TIMER_D);  // Start the counter of the Timer d operating in waveform mode
   /* USER CODE END 2 */
-
+int8_t increment=10;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 
-	  HAL_Delay(100);
+	  HAL_Delay(10);
 	  HAL_GPIO_TogglePin(LEDGREEN_GPIO_Port, LEDGREEN_Pin);
+
+	  if(hhrtim1.Instance->sMasterRegs.MCMP1R>=TIMA_PRESCALER*0.6){
+		  increment=-100;
+	  }
+
+	  if(hhrtim1.Instance->sMasterRegs.MCMP1R<=TIMA_PRESCALER*0.4){
+		  increment=+100;
+	  }
+
+	  hhrtim1.Instance->sMasterRegs.MCMP1R+=increment;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
