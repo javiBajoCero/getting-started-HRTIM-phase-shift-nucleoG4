@@ -55,7 +55,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int8_t increment=0;
 /* USER CODE END 0 */
 
 /**
@@ -109,7 +109,7 @@ int main(void)
   HAL_HRTIM_WaveformCounterStart(&hhrtim1, HRTIM_TIMERID_TIMER_C);  // Start the counter of the Timer c operating in waveform mode
   HAL_HRTIM_WaveformCounterStart(&hhrtim1, HRTIM_TIMERID_TIMER_D);  // Start the counter of the Timer d operating in waveform mode
   /* USER CODE END 2 */
-int8_t increment=10;
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
