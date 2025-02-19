@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "hrtim.h"
 #include "gpio.h"
 
@@ -33,7 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define ADCbufferlength 6 //half words
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,10 +57,19 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-float phase_diff=0.1;
+
 float toggle=1;
 
-float dutyA=0.5, dutyB=0.5;
+DABworkSetpoint_struct setpoint={
+		.main_phase_diff=0,
+		.primaryside_phase_diff=0,
+		.secondaryside_phase_diff=0,
+		.primaryside_duty=0,
+		.secondaryside_duty=0
+};
+
+uint32_t ADCbufferA[ADCbufferlength]={0};
+uint32_t ADCbufferB[ADCbufferlength]={0};
 /* USER CODE END 0 */
 
 /**
@@ -85,33 +96,56 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  MX_DMA_Init();
+  __HAL_DMA_DISABLE_IT(&hdma_adc1,DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&hdma_adc2,DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&hdma_adc1,DMA_IT_TC);
+  __HAL_DMA_DISABLE_IT(&hdma_adc2,DMA_IT_TC);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_HRTIM1_Init();
+  MX_ADC1_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
+
   HRTIM_dcdc_setup(&hhrtim1);
+  HAL_ADC_Start_DMA(&hadc1, ADCbufferA, ADCbufferlength);
+  HAL_ADC_Start_DMA(&hadc2, ADCbufferB, ADCbufferlength);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+
   while (1)
   {
 
 	  HAL_Delay(100);
 	  HAL_GPIO_TogglePin(LEDGREEN_GPIO_Port, LEDGREEN_Pin);
 
-	  if(phase_diff>0.3 || phase_diff<-0.3){
-		  toggle*=-1;
+
+	  if(setpoint.main_phase_diff>0.2 || setpoint.main_phase_diff<-0.2){
+	  toggle*=-1;
 	  }
 
-	  phase_diff+=0.01*toggle;
+	  setpoint.main_phase_diff+=0.01*toggle;
 
-	  HRTIM_set_phase(phase_diff);
-	  HRTIM_set_duty(dutyA, dutyB);
+
+	  HRTIM_set_phases(&setpoint);
+	  HRTIM_set_primaryandsecondary_duty(&setpoint);
+
+	  //slow start
+	  if(setpoint.primaryside_duty<0.5){
+		  setpoint.primaryside_duty+=0.01;
+	  }
+
+	  if(setpoint.secondaryside_duty<0.5){
+		  setpoint.secondaryside_duty+=0.01;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

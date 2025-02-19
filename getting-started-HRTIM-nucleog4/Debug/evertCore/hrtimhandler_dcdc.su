@@ -1,5 +1,6 @@
-../evertCore/hrtimhandler_dcdc.c:74:6:HRTIM_dcdc_setup	16	static
-../evertCore/hrtimhandler_dcdc.c:92:7:saturatefloat	24	static
-../evertCore/hrtimhandler_dcdc.c:102:10:saturateuint32_t	24	static
-../evertCore/hrtimhandler_dcdc.c:112:6:HRTIM_set_phase	40	static
-../evertCore/hrtimhandler_dcdc.c:122:6:HRTIM_set_duty	40	static
+../evertCore/hrtimhandler_dcdc.c:91:6:HRTIM_dcdc_setup	16	static
+../evertCore/hrtimhandler_dcdc.c:109:7:saturatefloat	24	static
+../evertCore/hrtimhandler_dcdc.c:119:10:saturateuint32_t	24	static
+../evertCore/hrtimhandler_dcdc.c:129:6:HRTIM_set_phases	40	static
+../evertCore/hrtimhandler_dcdc.c:148:6:HRTIM_set_primaryandsecondary_duty	32	static
+../evertCore/hrtimhandler_dcdc.c:162:6:HRTIM_setregisters_insideIRQ	4	static

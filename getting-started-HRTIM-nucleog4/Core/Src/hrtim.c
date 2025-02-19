@@ -34,6 +34,7 @@ void MX_HRTIM1_Init(void)
 
   /* USER CODE END HRTIM1_Init 0 */
 
+  HRTIM_ADCTriggerCfgTypeDef pADCTriggerCfg = {0};
   HRTIM_TimeBaseCfgTypeDef pTimeBaseCfg = {0};
   HRTIM_TimerCfgTypeDef pTimerCfg = {0};
   HRTIM_CompareCfgTypeDef pCompareCfg = {0};
@@ -46,9 +47,7 @@ void MX_HRTIM1_Init(void)
   /* USER CODE END HRTIM1_Init 1 */
   hhrtim1.Instance = HRTIM1;
   hhrtim1.Init.HRTIMInterruptResquests = HRTIM_IT_NONE;
-  hhrtim1.Init.SyncOptions = HRTIM_SYNCOPTION_MASTER;
-  hhrtim1.Init.SyncOutputSource = HRTIM_SYNCOUTPUTSOURCE_MASTER_START;
-  hhrtim1.Init.SyncOutputPolarity = HRTIM_SYNCOUTPUTPOLARITY_POSITIVE;
+  hhrtim1.Init.SyncOptions = HRTIM_SYNCOPTION_NONE;
   if (HAL_HRTIM_Init(&hhrtim1) != HAL_OK)
   {
     Error_Handler();
@@ -61,6 +60,26 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  pADCTriggerCfg.UpdateSource = HRTIM_ADCTRIGGERUPDATE_TIMER_A;
+  pADCTriggerCfg.Trigger = HRTIM_ADCTRIGGEREVENT13_TIMERA_CMP3;
+  if (HAL_HRTIM_ADCTriggerConfig(&hhrtim1, HRTIM_ADCTRIGGER_1, &pADCTriggerCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_HRTIM_ADCPostScalerConfig(&hhrtim1, HRTIM_ADCTRIGGER_1, 0x0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pADCTriggerCfg.UpdateSource = HRTIM_ADCTRIGGERUPDATE_TIMER_D;
+  pADCTriggerCfg.Trigger = HRTIM_ADCTRIGGEREVENT13_TIMERD_CMP3;
+  if (HAL_HRTIM_ADCTriggerConfig(&hhrtim1, HRTIM_ADCTRIGGER_3, &pADCTriggerCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_HRTIM_ADCPostScalerConfig(&hhrtim1, HRTIM_ADCTRIGGER_3, 0x0) != HAL_OK)
+  {
+    Error_Handler();
+  }
   pTimeBaseCfg.Period = TIMMASTER_PRESCALER;
   pTimeBaseCfg.RepetitionCounter = 0x00;
   pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_MUL32;
@@ -69,7 +88,7 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
-  pTimerCfg.InterruptRequests = HRTIM_MASTER_IT_NONE;
+  pTimerCfg.InterruptRequests = HRTIM_MASTER_IT_MUPD;
   pTimerCfg.DMARequests = HRTIM_MASTER_DMA_NONE;
   pTimerCfg.DMASrcAddress = 0x0000;
   pTimerCfg.DMADstAddress = 0x0000;
@@ -79,10 +98,10 @@ void MX_HRTIM1_Init(void)
   pTimerCfg.StartOnSync = HRTIM_SYNCSTART_DISABLED;
   pTimerCfg.ResetOnSync = HRTIM_SYNCRESET_DISABLED;
   pTimerCfg.DACSynchro = HRTIM_DACSYNC_NONE;
-  pTimerCfg.PreloadEnable = HRTIM_PRELOAD_DISABLED;
+  pTimerCfg.PreloadEnable = HRTIM_PRELOAD_ENABLED;
   pTimerCfg.UpdateGating = HRTIM_UPDATEGATING_INDEPENDENT;
   pTimerCfg.BurstMode = HRTIM_TIMERBURSTMODE_MAINTAINCLOCK;
-  pTimerCfg.RepetitionUpdate = HRTIM_UPDATEONREPETITION_DISABLED;
+  pTimerCfg.RepetitionUpdate = HRTIM_UPDATEONREPETITION_ENABLED;
   pTimerCfg.ReSyncUpdate = HRTIM_TIMERESYNC_UPDATE_UNCONDITIONAL;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim1, HRTIM_TIMERINDEX_MASTER, &pTimerCfg) != HAL_OK)
   {
@@ -97,6 +116,14 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_4, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
   pTimeBaseCfg.Period = TIMA_PRESCALER;
   pTimeBaseCfg.Mode = HRTIM_MODE_SINGLESHOT_RETRIGGERABLE;
   if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, &pTimeBaseCfg) != HAL_OK)
@@ -104,6 +131,7 @@ void MX_HRTIM1_Init(void)
     Error_Handler();
   }
   pTimerCtl.UpDownMode = HRTIM_TIMERUPDOWNMODE_UPDOWN;
+  pTimerCtl.GreaterCMP3 = HRTIM_TIMERGTCMP3_EQUAL;
   pTimerCtl.GreaterCMP1 = HRTIM_TIMERGTCMP1_EQUAL;
   pTimerCtl.DualChannelDacEnable = HRTIM_TIMER_DCDE_DISABLED;
   if (HAL_HRTIM_WaveformTimerControl(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, &pTimerCtl) != HAL_OK)
@@ -118,6 +146,7 @@ void MX_HRTIM1_Init(void)
   }
   pTimerCfg.InterruptRequests = HRTIM_TIM_IT_NONE;
   pTimerCfg.DMARequests = HRTIM_TIM_DMA_NONE;
+  pTimerCfg.RepetitionUpdate = HRTIM_UPDATEONREPETITION_DISABLED;
   pTimerCfg.PushPull = HRTIM_TIMPUSHPULLMODE_DISABLED;
   pTimerCfg.FaultEnable = HRTIM_TIMFAULTENABLE_NONE;
   pTimerCfg.FaultLock = HRTIM_TIMFAULTLOCK_READWRITE;
@@ -130,22 +159,29 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_MASTER_CMP2;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B, &pTimerCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_MASTER_CMP2;
+  pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_MASTER_CMP3;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_C, &pTimerCfg) != HAL_OK)
   {
     Error_Handler();
   }
   pTimerCfg.DelayedProtectionMode = HRTIM_TIMER_D_E_DELAYEDPROTECTION_DISABLED;
+  pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_MASTER_CMP4;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_D, &pTimerCfg) != HAL_OK)
   {
     Error_Handler();
   }
   pCompareCfg.CompareValue = TIMA_PRESCALER*TIMA_DUTY_CYCLE;
   if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_1, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pCompareCfg.CompareValue = TIMA_PRESCALER;
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
   {
     Error_Handler();
   }
@@ -281,6 +317,11 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  pCompareCfg.CompareValue = TIMA_PRESCALER;
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_D, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN HRTIM1_Init 2 */
 
   /* USER CODE END HRTIM1_Init 2 */
@@ -298,6 +339,10 @@ void HAL_HRTIM_MspInit(HRTIM_HandleTypeDef* hrtimHandle)
   /* USER CODE END HRTIM1_MspInit 0 */
     /* HRTIM1 clock enable */
     __HAL_RCC_HRTIM1_CLK_ENABLE();
+
+    /* HRTIM1 interrupt Init */
+    HAL_NVIC_SetPriority(HRTIM1_Master_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(HRTIM1_Master_IRQn);
   /* USER CODE BEGIN HRTIM1_MspInit 1 */
 
   /* USER CODE END HRTIM1_MspInit 1 */
@@ -357,6 +402,9 @@ void HAL_HRTIM_MspDeInit(HRTIM_HandleTypeDef* hrtimHandle)
   /* USER CODE END HRTIM1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_HRTIM1_CLK_DISABLE();
+
+    /* HRTIM1 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(HRTIM1_Master_IRQn);
   /* USER CODE BEGIN HRTIM1_MspDeInit 1 */
 
   /* USER CODE END HRTIM1_MspDeInit 1 */

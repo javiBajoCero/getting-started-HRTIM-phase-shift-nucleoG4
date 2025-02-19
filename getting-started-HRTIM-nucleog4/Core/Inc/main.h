@@ -59,9 +59,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define TIMA_PRESCALER (1700*32/2)
 #define TIMB_PRESCALER (1700*32/2)
-#define TIMB_DUTY_CYCLE 0.5
+#define TIMB_DUTY_CYCLE 0
 #define TIMMASTER_PRESCALER (1700*32)
-#define TIMA_DUTY_CYCLE 0.5
+#define TIMA_DUTY_CYCLE 0
 #define DEADTIME 136
 #define LEDGREEN_Pin GPIO_PIN_5
 #define LEDGREEN_GPIO_Port GPIOA

@@ -18,6 +18,9 @@ Core/Src/stm32g4xx_it.o: ../Core/Src/stm32g4xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h \
@@ -25,7 +28,8 @@ Core/Src/stm32g4xx_it.o: ../Core/Src/stm32g4xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_hrtim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h \
- ../Core/Inc/stm32g4xx_it.h
+ ../Core/Inc/stm32g4xx_it.h \
+ C:/Users/JavierMunozSaez/Documents/GitHub/getting-started-HRTIM-phase-shift-nucleoG4/getting-started-HRTIM-nucleog4/evertCore/hrtimhandler_dcdc.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -46,6 +50,9 @@ Core/Src/stm32g4xx_it.o: ../Core/Src/stm32g4xx_it.c ../Core/Inc/main.h \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h:
@@ -54,3 +61,4 @@ Core/Src/stm32g4xx_it.o: ../Core/Src/stm32g4xx_it.c ../Core/Inc/main.h \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h:
 ../Core/Inc/stm32g4xx_it.h:
+C:/Users/JavierMunozSaez/Documents/GitHub/getting-started-HRTIM-phase-shift-nucleoG4/getting-started-HRTIM-nucleog4/evertCore/hrtimhandler_dcdc.h:

@@ -14,7 +14,19 @@
 #ifndef __HRTIMHANDLER_DCDC_H__
 #define __HRTIMHANDLER_DCDC_H__
 
+typedef struct {
+	float	main_phase_diff;			//delta
+	float	primaryside_phase_diff;		//alpha1
+	float	secondaryside_phase_diff;	//alpha2
+	float	primaryside_duty;			//tau1
+	float	secondaryside_duty;			//tau2
+}DABworkSetpoint_struct;
+
 void HRTIM_dcdc_setup(HRTIM_HandleTypeDef * hrtim);
-void HRTIM_set_phase(float phase_diff);
-void HRTIM_set_duty(float dutyPRI, float dutySEC);
+
+void HRTIM_set_phases					( DABworkSetpoint_struct* setpoint);
+void HRTIM_set_primaryandsecondary_duty	( DABworkSetpoint_struct* setpoint);
+
+void HRTIM_setregisters_insideIRQ();
+
 #endif /*__HRTIMHANDLER_DCDC_H__ */
